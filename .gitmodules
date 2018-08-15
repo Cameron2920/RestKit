@@ -13,3 +13,6 @@
 [submodule "Vendor/SOCKit"]
 	path = Vendor/SOCKit
 	url = https://github.com/NimbusKit/sockit.git
+[submodule "Vendor/iso-8601-date-formatter"]
+	path = Vendor/iso-8601-date-formatter
+	url = https://github.com/boredzo/iso-8601-date-formatter

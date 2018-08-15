@@ -18,7 +18,11 @@
 //  limitations under the License.
 //
 
-#import <RKValueTransformers/RKValueTransformers.h>
+#if __has_include(<RKValueTransformers/RKValueTransformers.h>)
+#   import <RKValueTransformers/RKValueTransformers.h>
+#else
+#   import "RKValueTransformers.h"
+#endif
 
 #import "RKObjectMapping.h"
 #import "RKAttributeMapping.h"
