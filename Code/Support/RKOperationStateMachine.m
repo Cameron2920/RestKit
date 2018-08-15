@@ -167,7 +167,7 @@ static NSString *const RKOperationLockName = @"org.restkit.operation.lock";
 
 - (void)setExecutionBlock:(void (^)(void))block
 {
-    __weak __typeof(self)weakSelf = self;
+    __typeof(self)weakSelf = self;
     TKState *executingState = [self.stateMachine stateNamed:RKOperationStateExecuting];
     [executingState setDidEnterStateBlock:^(TKState *state, TKTransition *transition) {
         [weakSelf.operation didChangeValueForKey:@"isExecuting"];

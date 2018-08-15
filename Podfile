@@ -20,7 +20,7 @@ end
 
 target 'RestKit' do
   platform :ios, '8.0'
-  podspec
+  #podspec
 
   target 'RestKitTests' do
       inherit! :search_paths
@@ -28,9 +28,18 @@ target 'RestKit' do
   end
 end
 
+target 'RestKitFrameworkiOS' do
+  platform :ios, '8.0'
+  pod 'ISO8601DateFormatterValueTransformer', '~> 0.6.1'
+  pod 'RKValueTransformers', :git => 'https://github.com/Cameron2920/RKValueTransformers'
+  pod 'CocoaLumberjack'
+	pod 'TransitionKit', '~> 2.2'
+	pod 'SOCKit'
+end
+
 target 'RestKitFramework' do
   platform :osx, '10.9'
-  podspec
+  #podspec
 
   target 'RestKitFrameworkTests' do
       inherit! :search_paths

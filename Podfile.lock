@@ -44,7 +44,7 @@ DEPENDENCIES:
   - RestKit/Search (from `.`)
   - RestKit/Testing (from `.`)
   - RKCLLocationValueTransformer (~> 1.1.0)
-  - RKValueTransformers (~> 1.1.0)
+  - RKValueTransformers (from `https://github.com/Cameron2920/RKValueTransformers`)
   - SOCKit
   - Specta (= 1.0.6)
   - TransitionKit (~> 2.2)
@@ -52,6 +52,13 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   RestKit:
     :path: "."
+  RKValueTransformers:
+    :git: https://github.com/Cameron2920/RKValueTransformers
+
+CHECKOUT OPTIONS:
+  RKValueTransformers:
+    :commit: c13ed7122560c44759db1a1a272222bda890e80f
+    :git: https://github.com/Cameron2920/RKValueTransformers
 
 SPEC CHECKSUMS:
   CocoaLumberjack: 97fab7ee5f507fe54445cca7ea80f926729cfd15
@@ -66,6 +73,6 @@ SPEC CHECKSUMS:
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
   TransitionKit: 9ceccda4cd0cdc0a05ef85eb235e5a3292c3c250
 
-PODFILE CHECKSUM: b8958dcfe595d2829cf28ef5cb76c4da13eb2ed0
+PODFILE CHECKSUM: a2cbd69e4a74a3e517cbf382d8b7a65515b1f60a
 
 COCOAPODS: 1.2.1
