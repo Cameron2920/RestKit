@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFRKURLConnectionOperation.h"
+#import "RKHTTPUtilities.h"
 
 #import <Availability.h>
 
@@ -396,6 +397,12 @@ typedef enum {
      parameters:(NSDictionary *)parameters
         success:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success
         failure:(void (^)(AFRKHTTPRequestOperation *operation, NSError *error))failure;
+
+- (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+        success:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFRKHTTPRequestOperation *operation, NSError *error))failure
+  progressBlock:(ProgressBlock)progressBlock;
 
 /**
  Creates an `AFHTTPRequestOperation` with a `POST` request, and enqueues it to the HTTP client's operation queue.

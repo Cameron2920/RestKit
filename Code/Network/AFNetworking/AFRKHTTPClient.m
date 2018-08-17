@@ -674,6 +674,28 @@ static void AFRKNetworkReachabilityReleaseCallback(const void *info) {
     [self enqueueHTTPRequestOperation:operation];
 }
 
+- (void)getPath:(NSString *)path
+     parameters:(NSDictionary *)parameters
+        success:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success
+        failure:(void (^)(AFRKHTTPRequestOperation *operation, NSError *error))failure
+  progressBlock:(ProgressBlock)progressBlock
+{
+  NSURLRequest *request = [self requestWithMethod:@"GET" path:path parameters:parameters];
+  AFRKHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
+  
+  if(progressBlock){
+    if(progressBlock){
+      [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+        progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
+      }];
+      [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+        progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
+      }];
+    }
+  }
+  [self enqueueHTTPRequestOperation:operation];
+}
+
 - (void)postPath:(NSString *)path
       parameters:(NSDictionary *)parameters
          success:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success

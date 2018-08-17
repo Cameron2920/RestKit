@@ -153,6 +153,15 @@ NSString *RKPathAndQueryStringFromURLRelativeToURL(NSURL *URL, NSURL *baseURL);
  *  @return An index set of the status codes with optional response bodies
  */
 NSIndexSet *RKStatusCodesOfResponsesWithOptionalBodies(void);
+  
+  
+typedef NS_ENUM(NSUInteger, ProgressState) {
+  Upload,
+  ServerProcessing,
+  Download
+};
+
+typedef void (^ProgressBlock)(double progress, ProgressState progressState);
 
 #ifdef __cplusplus
 }

@@ -21,6 +21,7 @@
 #import "RKRouter.h"
 #import "RKPaginator.h"
 #import "RKMacros.h"
+#import "RKHTTPUtilities.h"
 
 #import "AFRKNetworking.h"
 
@@ -487,6 +488,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
                                                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                                       success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                                                                       failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+- (RKManagedObjectRequestOperation *)managedObjectRequestOperationWithRequest:(NSURLRequest *)request
+                                                         managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                                      success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                                                                      failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+                                                                progressBlock:(ProgressBlock)progressBlock;
+
 #endif
 
 /**
@@ -607,6 +615,12 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
                  success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                  failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+- (void)getObjectsAtPath:(NSString *)path
+       parameters:(NSDictionary *)parameters
+          success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+          failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+    progressBlock:(ProgressBlock)progressBlock;
+
 /**
  Creates an `RKObjectRequestOperation` with a `GET` request for the relationship with the given name of the given object, and enqueues it to the manager's operation queue.
  
@@ -673,6 +687,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+- (void)getObject:(id)object
+             path:(NSString *)path
+       parameters:(NSDictionary *)parameters
+          success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+          failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+    progressBlock:(ProgressBlock)progressBlock;
+
 /**
  Creates an `RKObjectRequestOperation` with a `POST` request for the given object, and enqueues it to the manager's operation queue.
  
@@ -690,6 +711,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
         parameters:(NSDictionary *)parameters
            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+- (void)postObject:(id)object
+              path:(NSString *)path
+        parameters:(NSDictionary *)parameters
+           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+     progressBlock:(ProgressBlock)progressBlock;
 
 /**
  Creates an `RKObjectRequestOperation` with a `PUT` request for the given object, and enqueues it to the manager's operation queue.
@@ -709,6 +737,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
           success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
           failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+- (void)putObject:(id)object
+             path:(NSString *)path
+       parameters:(NSDictionary *)parameters
+          success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+          failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+    progressBlock:(ProgressBlock)progressBlock;
+
 /**
  Creates an `RKObjectRequestOperation` with a `PATCH` request for the given object, and enqueues it to the manager's operation queue.
  
@@ -726,6 +761,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
          parameters:(NSDictionary *)parameters
             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+- (void)patchObject:(id)object
+               path:(NSString *)path
+         parameters:(NSDictionary *)parameters
+            success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+            failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+      progressBlock:(ProgressBlock)progressBlock;
 
 /**
  Creates an `RKObjectRequestOperation` with a `DELETE` request for the given object, and enqueues it to the manager's operation queue.
@@ -746,6 +788,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
           parameters:(NSDictionary *)parameters
              success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
              failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
+
+- (void)deleteObject:(id)object
+                path:(NSString *)path
+          parameters:(NSDictionary *)parameters
+             success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+             failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+       progressBlock:(ProgressBlock)progressBlock;
 
 ///------------------------------------------------
 /// @name Managing Request and Response Descriptors
