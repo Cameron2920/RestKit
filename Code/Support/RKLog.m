@@ -23,14 +23,14 @@
 @interface RKNSLogLogger : NSObject <RKLogging>
 @end
 
-#if RKLOG_USE_NSLOGGER && __has_include("LCLNSLogger_RK.h")
+#if RKLOG_USE_RKNSLOGGER
+  #define RKLOG_CLASS RKNSLogLogger
+#elif RKLOG_USE_NSLOGGER && __has_include("LCLNSLogger_RK.h")
   #import "LCLNSLogger_RK.h"
   #define RKLOG_CLASS LCLNSLogger_RK
-
 #elif __has_include("RKLumberjackLogger.h") && __has_include(<CocoaLumberjack/CocoaLumberjack.h>)
   #import "RKLumberjackLogger.h"
   #define RKLOG_CLASS RKLumberjackLogger
-
 #else
   #define RKLOG_CLASS RKNSLogLogger
 #endif

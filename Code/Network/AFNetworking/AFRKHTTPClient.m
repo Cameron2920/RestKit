@@ -684,14 +684,12 @@ static void AFRKNetworkReachabilityReleaseCallback(const void *info) {
   AFRKHTTPRequestOperation *operation = [self HTTPRequestOperationWithRequest:request success:success failure:failure];
   
   if(progressBlock){
-    if(progressBlock){
-      [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-        progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
-      }];
-      [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-        progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
-      }];
-    }
+    [operation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+      progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
+    }];
+    [operation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+      progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
+    }];
   }
   [self enqueueHTTPRequestOperation:operation];
 }
