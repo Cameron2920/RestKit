@@ -253,6 +253,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
 @property (nonatomic, strong) NSDate *mappingDidFinishDate;
 @property (nonatomic, copy) void (^successBlock)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult);
 @property (nonatomic, copy) void (^failureBlock)(RKObjectRequestOperation *operation, NSError *error);
+@property (nonatomic, copy) ProgressBlock progressBlock;
 @end
 
 @implementation RKObjectRequestOperation
@@ -418,36 +419,51 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
 }
 
 - (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                              failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
+  [self setCompletionBlockWithSuccess:success failure:failure];
+}
+
+- (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
-{
-    //Keep blocks for copyWithZone
-    self.successBlock = success;
-    self.failureBlock = failure;
-    
-    __weak __typeof(self) const weakSelf = self;
-    self.completionBlock = ^ {
-		__typeof(self) const strongSelf = weakSelf; // Retain object, so we for sure have something to pass to the success and/or failure blocks.
-		if(strongSelf)
-        {
-            if ([strongSelf isCancelled] && !strongSelf.error) {
-                strongSelf.error = [NSError errorWithDomain:RKErrorDomain code:RKOperationCancelledError userInfo:nil];
-            }
-            
-            if (strongSelf.error) {
-                if (failure) {
-                    dispatch_async(strongSelf.failureCallbackQueue ?: dispatch_get_main_queue(), ^{
-                        failure(strongSelf, strongSelf.error);
-                    });
-                }
-            } else {
-                if (success) {
-                    dispatch_async(strongSelf.successCallbackQueue ?: dispatch_get_main_queue(), ^{
-                        success(strongSelf, strongSelf.mappingResult);
-                    });
-                }
-            }
+                             progress:(ProgressBlock)progressBlock {
+  //Keep blocks for copyWithZone
+  self.successBlock = success;
+  self.failureBlock = failure;
+  self.progressBlock = progressBlock;
+
+  __weak __typeof(self) const weakSelf = self;
+  self.completionBlock = ^ {
+    __typeof(self) const strongSelf = weakSelf; // Retain object, so we for sure have something to pass to the success and/or failure blocks.
+    if(strongSelf)
+    {
+      if ([strongSelf isCancelled] && !strongSelf.error) {
+        strongSelf.error = [NSError errorWithDomain:RKErrorDomain code:RKOperationCancelledError userInfo:nil];
+      }
+      
+      if (strongSelf.error) {
+        if (failure) {
+          dispatch_async(strongSelf.failureCallbackQueue ?: dispatch_get_main_queue(), ^{
+            failure(strongSelf, strongSelf.error);
+          });
         }
-    };
+      } else {
+        if (success) {
+          dispatch_async(strongSelf.successCallbackQueue ?: dispatch_get_main_queue(), ^{
+            success(strongSelf, strongSelf.mappingResult);
+          });
+        }
+      }
+    }
+  };
+  
+  if(progressBlock){
+    [self.HTTPRequestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
+      progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
+    }];
+    [self.HTTPRequestOperation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
+      progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
+    }];
+  }
 }
 
 - (void)performMappingOnResponseWithCompletionBlock:(void(^)(RKMappingResult *mappingResult, NSError *error))completionBlock
@@ -515,7 +531,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
         RKLogError(@"Object request failed: Underlying HTTP request operation failed with error: %@", weakSelf.HTTPRequestOperation.error);
         weakSelf.error = weakSelf.HTTPRequestOperation.error;
         [weakSelf.stateMachine finish];
-    }];
+    } progress:self.progressBlock];
     
     // Send the request
     [self.HTTPRequestOperation start];

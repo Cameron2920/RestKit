@@ -164,6 +164,10 @@ extern NSString * const RKResponseHasBeenMappedCacheUserInfoKey;
 - (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
+- (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                              failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+                             progress:(ProgressBlock)progressBlock;
+
 /**
  The callback dispatch queue on success. If `NULL` (default), the main queue is used.
  

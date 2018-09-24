@@ -22,6 +22,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFRKURLConnectionOperation.h"
+#import "RKHTTPUtilities.h"
 
 /**
  `AFHTTPRequestOperation` is a subclass of `AFURLConnectionOperation` for requests using the HTTP or HTTPS protocols. It encapsulates the concept of acceptable status codes and content types, which determine the success or failure of a request.
@@ -120,6 +121,9 @@
 - (void)setCompletionBlockWithSuccess:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success
                               failure:(void (^)(AFRKHTTPRequestOperation *operation, NSError *error))failure;
 
+- (void)setCompletionBlockWithSuccess:(void (^)(AFRKHTTPRequestOperation *operation, id responseObject))success
+                              failure:(void (^)(AFRKHTTPRequestOperation *operation, NSError *error))failure
+                             progress:(ProgressBlock)progressBlock;
 @end
 
 ///----------------

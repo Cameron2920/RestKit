@@ -355,12 +355,6 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 
 @end
 
-@interface RKObjectManager (Private)
-
-- (void)addProgressBlock:(ProgressBlock)progressBlock toOperation:(RKObjectRequestOperation *)operation;
-
-@end
-
 @implementation RKObjectManager
 
 - (instancetype)init
@@ -635,8 +629,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
   [self copyStateFromHTTPClientToHTTPRequestOperation:HTTPRequestOperation];
   Class objectRequestOperationClass = [self requestOperationClassForRequest:request fromRegisteredClasses:self.registeredManagedObjectRequestOperationClasses] ?: [RKManagedObjectRequestOperation class];
   RKManagedObjectRequestOperation *operation = (RKManagedObjectRequestOperation *)[[objectRequestOperationClass alloc] initWithHTTPRequestOperation:HTTPRequestOperation responseDescriptors:responseDescriptors];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   operation.managedObjectContext = managedObjectContext ?: self.managedObjectStore.mainQueueManagedObjectContext;
   operation.managedObjectCache = self.managedObjectStore.managedObjectCache;
   operation.fetchRequestBlocks = self.fetchRequestBlocks;
@@ -779,8 +772,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSParameterAssert(path);
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:nil method:RKRequestMethodGET path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -802,8 +794,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSAssert(object || path, @"Cannot make a request without an object or a path.");
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:object method:RKRequestMethodGET path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -825,8 +816,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSAssert(object || path, @"Cannot make a request without an object or a path.");
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:object method:RKRequestMethodPOST path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -848,8 +838,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSAssert(object || path, @"Cannot make a request without an object or a path.");
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:object method:RKRequestMethodPUT path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -871,8 +860,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSAssert(object || path, @"Cannot make a request without an object or a path.");
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:object method:RKRequestMethodPATCH path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -894,8 +882,7 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 {
   NSAssert(object || path, @"Cannot make a request without an object or a path.");
   RKObjectRequestOperation *operation = [self appropriateObjectRequestOperationWithObject:object method:RKRequestMethodDELETE path:path parameters:parameters];
-  [operation setCompletionBlockWithSuccess:success failure:failure];
-  [self addProgressBlock:progressBlock toOperation:operation];
+  [operation setCompletionBlockWithSuccess:success failure:failure progress:progressBlock];
   [self enqueueObjectRequestOperation:operation];
 }
 
@@ -1098,22 +1085,6 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
     [self enqueueObjectRequestOperation:operation];
   }
   [self.operationQueue addOperation:batchedOperation];
-}
-
-@end
-
-@implementation RKObjectManager (Private)
-
-- (void)addProgressBlock:(ProgressBlock)progressBlock toOperation:(RKObjectRequestOperation *)operation
-{
-  if(progressBlock){
-    [operation.HTTPRequestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-      progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
-    }];
-    [operation.HTTPRequestOperation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-      progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
-    }];
-  }
 }
 
 @end

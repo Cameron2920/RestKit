@@ -21,7 +21,6 @@ PODS:
   - RestKit/ObjectMapping (0.27.2):
     - ISO8601DateFormatterValueTransformer (~> 0.6.1)
     - RestKit/Support
-    - RKValueTransformers (~> 1.1.0)
   - RestKit/Search (0.27.2):
     - RestKit/CoreData
   - RestKit/Support (0.27.2):
@@ -66,13 +65,13 @@ SPEC CHECKSUMS:
   ISO8601DateFormatterValueTransformer: 52da467d6ec899d6aedda8e48280ac92e8ee97e6
   OCHamcrest: e19857683e4eefab64b878668eac04c2f4567118
   OCMock: a6a7dc0e3997fb9f35d99f72528698ebf60d64f2
-  RestKit: 556c913b0640c5bc5a9cb972361504e3ed628a1d
+  RestKit: 51a7968b18a04ff617e88fb0fa3929c846c87846
   RKCLLocationValueTransformer: 2cf0ea0fb7cd4bc70c56834fb92abc717c66f982
   RKValueTransformers: e5ed67e3811229b616fe01bddeeafe3bb337b1b9
   SOCKit: c7376ac262bea9115b8f749358f762522a47d392
   Specta: f506f3a8361de16bc0dcf3b17b75e269072ba465
   TransitionKit: 9ceccda4cd0cdc0a05ef85eb235e5a3292c3c250
 
-PODFILE CHECKSUM: a2cbd69e4a74a3e517cbf382d8b7a65515b1f60a
+PODFILE CHECKSUM: 73bde496b00472143ad71d54edec1dc0971a43c0
 
 COCOAPODS: 1.2.1
