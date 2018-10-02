@@ -282,14 +282,15 @@ static void AFRKSwizzleClassMethodWithClassAndSelectorUsingBlock(Class klass, SE
 #pragma clang diagnostic ignored "-Wgnu"
   if(progressBlock){
     self.completionBlock = ^{
-      if (self.error) {
-        if (failure) {
+      if(self.error){
+        if(failure){
           dispatch_async(self.failureCallbackQueue ?: dispatch_get_main_queue(), ^{
             failure(self, self.error);
           });
         }
-      } else {
-        if (success) {
+      }
+      else{
+        if(success){
           NSString * progressJobID = self.response.allHeaderFields[ProgressJobIDHeader];
           
           if(progressJobID){

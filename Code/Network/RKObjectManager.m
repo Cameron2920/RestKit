@@ -251,6 +251,7 @@ static BOOL RKDoesArrayOfResponseDescriptorsContainEntityMapping(NSArray *respon
   
   return NO;
 }
+
 #endif
 
 BOOL RKDoesArrayOfResponseDescriptorsContainOnlyEntityMappings(NSArray *responseDescriptors);
@@ -421,6 +422,18 @@ static NSString *RKMIMETypeFromAFHTTPClientParameterEncoding(AFRKHTTPClientParam
 - (NSDictionary *)defaultHeaders
 {
   return self.HTTPClient.defaultHeaders;
+}
+
+-(BOOL)doesArrayOfResponseDescriptorsContainMappingForClass:(NSArray *)responseDescriptors classToBeMapped:(Class)classToBeMapped; {
+  return RKDoesArrayOfResponseDescriptorsContainMappingForClass(responseDescriptors, classToBeMapped);
+}
+
+-(BOOL)doesArrayOfResponseDescriptorsContainEntityMapping:(NSArray *)responseDescriptors; {
+  return RKDoesArrayOfResponseDescriptorsContainEntityMapping(responseDescriptors);
+}
+
+- (NSArray *)filteredArrayOfResponseDescriptorsMatchingPathAndMethod:(NSArray *)responseDescriptors string:(NSString *)path method:(RKRequestMethod)method; {
+  return RKFilteredArrayOfResponseDescriptorsMatchingPathAndMethod(responseDescriptors, path, method);
 }
 
 #pragma mark - Building Requests

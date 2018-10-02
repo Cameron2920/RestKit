@@ -348,6 +348,15 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
  */
 - (void)setAcceptHeaderWithMIMEType:(NSString *)MIMEType;
 
+#ifdef RKCoreDataIncluded
+
+- (NSArray *)filteredArrayOfResponseDescriptorsMatchingPathAndMethod:(NSArray *)responseDescriptors string:(NSString *)path method:(RKRequestMethod)method;
+
+#endif
+
+-(BOOL)doesArrayOfResponseDescriptorsContainEntityMapping:(NSArray *)responseDescriptors;
+
+-(BOOL)doesArrayOfResponseDescriptorsContainMappingForClass:(NSArray *)responseDescriptors classToBeMapped:(Class)classToBeMapped;
 ///-------------------------------
 /// @name Creating Request Objects
 ///-------------------------------
@@ -490,6 +499,13 @@ RKMappingResult, RKRequestDescriptor, RKResponseDescriptor;
                                                                       failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure;
 
 - (RKManagedObjectRequestOperation *)managedObjectRequestOperationWithRequest:(NSURLRequest *)request
+                                                         managedObjectContext:(NSManagedObjectContext *)managedObjectContext
+                                                                      success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
+                                                                      failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure
+                                                                progressBlock:(ProgressBlock)progressBlock;
+
+- (RKManagedObjectRequestOperation *)managedObjectRequestOperationWithRequest:(NSURLRequest *)request
+                                                          responseDescriptors:(NSArray *)responseDescriptors
                                                          managedObjectContext:(NSManagedObjectContext *)managedObjectContext
                                                                       success:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                                                                       failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure

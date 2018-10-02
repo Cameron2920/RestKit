@@ -348,7 +348,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
 - (instancetype)initWithRequest:(NSURLRequest *)request responseDescriptors:(NSArray *)responseDescriptors
 {
     NSParameterAssert(request);
-    NSParameterAssert(responseDescriptors);    
+    NSParameterAssert(responseDescriptors);
     return [self initWithHTTPRequestOperation:[[RKHTTPRequestOperation alloc] initWithRequest:request] responseDescriptors:responseDescriptors];
 }
 
@@ -457,11 +457,15 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
   };
   
   if(progressBlock){
-    [self.HTTPRequestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead) {
-      progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
+    [self.HTTPRequestOperation setDownloadProgressBlock:^(NSUInteger bytesRead, long long totalBytesRead, long long totalBytesExpectedToRead){
+      if(totalBytesExpectedToRead > 0){
+        progressBlock((1.0 * totalBytesRead) / totalBytesExpectedToRead, Download);
+      }
     }];
-    [self.HTTPRequestOperation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite) {
-      progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
+    [self.HTTPRequestOperation setUploadProgressBlock:^(NSUInteger bytesWritten, long long totalBytesWritten, long long totalBytesExpectedToWrite){
+      if(totalBytesExpectedToWrite > 0){
+        progressBlock((1.0 * totalBytesWritten) / totalBytesExpectedToWrite, Upload);
+      }
     }];
   }
 }
