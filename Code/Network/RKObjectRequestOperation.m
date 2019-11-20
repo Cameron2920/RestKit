@@ -420,7 +420,7 @@ static NSString *RKStringDescribingURLResponseWithData(NSURLResponse *response, 
 
 - (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
                               failure:(void (^)(RKObjectRequestOperation *operation, NSError *error))failure {
-  [self setCompletionBlockWithSuccess:success failure:failure];
+  [self setCompletionBlockWithSuccess:success failure:failure progress:nil];
 }
 
 - (void)setCompletionBlockWithSuccess:(void (^)(RKObjectRequestOperation *operation, RKMappingResult *mappingResult))success
